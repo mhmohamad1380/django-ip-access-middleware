@@ -1,0 +1,7 @@
+include README.md
+include LICENSE
+include pyproject.toml
+include MANIFEST.in
+recursive-include django_ip_access *.py
+recursive-include django_ip_access/migrations *.py
+
