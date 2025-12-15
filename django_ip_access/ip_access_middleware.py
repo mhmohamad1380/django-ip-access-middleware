@@ -332,26 +332,24 @@ class IPAccessMiddleware(MiddlewareMixin):
         
         return False
     
-    def process_request(self, request: HttpRequest) -> Optional[HttpResponse]:
-        """
-        Process the request and check access control.
-        Returns None to continue processing, or HttpResponse to block.
-        """
+    def process_request(self, request):
         request_path = request.path
-        routes = self.config.get('routes', [])
-        
-        # Check if any route matches
+        routes = self.config.get("routes", [])
+    
         for route_config in routes:
             if self._match_route(request_path, route_config):
-                # Route matches, check access
                 if not self._is_access_allowed(request, route_config):
-                    # Access denied
-                    return HttpResponse(
-                        'Access Denied: Your IP address or hostname is not authorized to access this resource.',
-                        status=403
+                    from .utils import get_deny_handler
+                    from django.conf import settings
+    
+                    cfg = getattr(settings, "IP_ACCESS_MIDDLEWARE", {})
+                    handler = get_deny_handler()
+    
+                    return handler(
+                        request=request,
+                        message=cfg.get("DENY_MESSAGE", "Access denied"),
+                        status_code=cfg.get("DENY_STATUS_CODE", 403),
                     )
-                # Access allowed, continue
                 return None
-        
-        # No route matched, pass through
+    
         return None
