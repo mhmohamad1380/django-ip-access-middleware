@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://mhmohamad1380.github.io/django-ip-access-middleware/configuration/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Configuration - Django IP Access Middleware</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Configuration";
+        var mkdocs_page_input_path = "configuration.md";
+        var mkdocs_page_url = "/django-ip-access-middleware/configuration/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Django IP Access Middleware
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation & Setup</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../usage/">Usage</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Configuration</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#route-types">Route types</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment variables</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#same-network-detection">Same network detection</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#deny-response-behavior">Deny response behavior</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../api/">API Reference</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../contributing/">Contributing</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Django IP Access Middleware</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Configuration</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/mhmohamad1380/django-ip-access-middleware/edit/master/docs/configuration.md">Edit on django-ip-access-middleware</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<h3 id="route-types">Route types<a class="headerlink" href="#route-types" title="Permanent link">&para;</a></h3>
+<p>Each route entry in <code>IP_ACCESS_MIDDLEWARE_CONFIG["routes"]</code> has a <code>pattern</code> and
+<code>type</code>:</p>
+<ul>
+<li><strong>regex</strong>: Match using regular expressions.</li>
+<li><strong>exact</strong>: Exact path match.</li>
+<li><strong>startswith</strong>: Match when the request path starts with the pattern.</li>
+<li><strong>endswith</strong>: Match when the request path ends with the pattern.</li>
+</ul>
+<h3 id="environment-variables">Environment variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>ALLOWED_HOSTNAMES</code></strong>: Comma-separated list of allowed hostnames
+  (supports wildcards like <code>*.example.com,api.example.com</code>).</li>
+<li><strong><code>POD_IP</code></strong>: Kubernetes pod IP (optional, for explicit network detection).</li>
+<li><strong><code>KUBERNETES_NETWORK_RANGE</code></strong>: Kubernetes network range
+  (e.g. <code>10.244.0.0/16</code>).</li>
+</ul>
+<h3 id="same-network-detection">Same network detection<a class="headerlink" href="#same-network-detection" title="Permanent link">&para;</a></h3>
+<p>The middleware can automatically detect when the client IP is on the same
+private network as the server:</p>
+<ul>
+<li>Detects private IPs on the same subnet.</li>
+<li>If same-network is detected, access is allowed with highest priority.</li>
+</ul>
+<h3 id="deny-response-behavior">Deny response behavior<a class="headerlink" href="#deny-response-behavior" title="Permanent link">&para;</a></h3>
+<p>By default, when access is denied:</p>
+<ul>
+<li>For Django REST framework requests, a JSON response is returned.</li>
+<li>For regular Django requests, JSON is returned for XHR/JSON clients and an
+  HTML response for browsers.</li>
+</ul>
+<p>You can override the deny handler by providing
+<code>"DENY_RESPONSE_HANDLER": "path.to.callable"</code> in
+<code>IP_ACCESS_MIDDLEWARE_CONFIG</code>. The callable should accept <code>(request, reason)</code>
+and return a Django <code>HttpResponse</code> (or DRF <code>Response</code>).</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../usage/" class="btn btn-neutral float-left" title="Usage"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../api/" class="btn btn-neutral float-right" title="API Reference">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/mhmohamad1380/django-ip-access-middleware" class="fa fa-code-fork" style="color: #fcfcfc"> django-ip-access-middleware</a>
+        </span>
+    
+    
+      <span><a href="../usage/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../api/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
