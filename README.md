@@ -69,6 +69,10 @@ Configure which routes should be protected in `settings.py`:
 
 ```python
 IP_ACCESS_MIDDLEWARE_CONFIG = {
+    "DENY_MESSAGE": "Access denied",
+    "DENY_STATUS_CODE": 403,
+    # optional override
+    # "DENY_RESPONSE_HANDLER": "myapp.security.custom_deny_handler",
     'routes': [
         {
             'pattern': r'^/admin/.*',  # regex pattern

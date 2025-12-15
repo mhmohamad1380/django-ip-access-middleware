@@ -10,7 +10,7 @@ long_description = readme_file.read_text(encoding='utf-8') if readme_file.exists
 
 setup(
     name='django-ip-access-middleware',
-    version='1.0.3',
+    version='1.0.4',
     description='Django middleware for IP and hostname-based access control',
     long_description=long_description,
     long_description_content_type='text/markdown',

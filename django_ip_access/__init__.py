@@ -8,7 +8,7 @@ A Django middleware for IP and hostname-based access control with support for:
 - Route-based access control with regex, exact, startswith, endswith patterns
 """
 
-__version__ = '1.0.3'
+__version__ = '1.0.4'
 __author__ = 'Mohammad Mohammad Hosseini'
 __email__ = 'dev.mohammadhosseiny@gmail.com'
 
