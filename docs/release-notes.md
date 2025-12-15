@@ -5,7 +5,7 @@ This page mirrors the project changelog. The canonical source is
 
 ---
 
-## [1.1.0] - 2025-12-15
+## [1.1.0] - UNDER DEVELOPMENT
 
 ### Summary
 
