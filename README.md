@@ -180,6 +180,106 @@ Set environment variable:
 export ALLOWED_HOSTNAMES="*.example.com,api.example.com"
 ```
 
+## Opt-in usage with mixins and decorators
+
+Sometimes you don’t want to install the middleware globally, but instead
+protect only specific views. This package provides a mixin and a decorator
+that reuse the exact same access-control logic as the middleware.
+
+### Django class-based views
+
+```python
+from django.views.generic import TemplateView
+from django_ip_access.mixins import IPAccessMixin
+
+
+class SecureDashboardView(IPAccessMixin, TemplateView):
+    template_name = "secure_dashboard.html"
+
+    # Optional: customise how the route is matched
+    # ip_access_route_config = {
+    #     "pattern": "/dashboard/",
+    #     "type": "startswith",
+    # }
+```
+
+### Django function-based views
+
+```python
+from django_ip_access.decorators import ip_access_required
+
+
+@ip_access_required()  # default: protect this exact path only
+def secure_view(request):
+    ...
+
+
+@ip_access_required(route_config={"pattern": "/api/", "type": "startswith"})
+def secure_api_view(request):
+    ...
+```
+
+### Django REST framework: generic views & APIView
+
+`IPAccessMixin` works out of the box with DRF generic views and `APIView`,
+because they are class-based views with a `dispatch` method.
+
+```python
+from rest_framework import generics
+from django_ip_access import IPAccessMixin
+
+from .serializers import ItemSerializer
+from .models import Item
+
+
+class SecureItemListView(IPAccessMixin, generics.ListAPIView):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+
+    # Optional: customise matching
+    # ip_access_route_config = {
+    #     "pattern": "/api/items/",
+    #     "type": "exact",
+    # }
+```
+
+You can also use the decorator on DRF `APIView` methods (or plain DRF FBVs):
+
+```python
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django_ip_access.decorators import ip_access_required
+
+
+class SecureStatusView(APIView):
+    @ip_access_required()
+    def get(self, request, *args, **kwargs):
+        return Response({"status": "ok"})
+```
+
+### Django REST framework: viewsets
+
+For DRF viewsets, you can mix in `IPAccessMixin` as well, since viewsets
+inherit from `APIView`:
+
+```python
+from rest_framework import viewsets
+from django_ip_access import IPAccessMixin
+
+from .serializers import ItemSerializer
+from .models import Item
+
+
+class SecureItemViewSet(IPAccessMixin, viewsets.ModelViewSet):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+```
+
+The deny response automatically adapts:
+- For DRF `Request` objects, it returns a DRF `Response` with a JSON payload.
+- For regular Django requests, it returns JSON (for XHR/JSON clients) or an
+  HTML response for browsers.
+
 ## Django Admin
 
 The middleware includes a Django admin interface for managing granted IPs at `/admin/`:

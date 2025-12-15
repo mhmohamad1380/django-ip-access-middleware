@@ -1,0 +1,24 @@
+site_name: Django IP Access Middleware
+site_description: IP and hostname-based access control for Django projects
+site_url: ""
+repo_url: "https://github.com/mhmohamad1380/django-ip-access-middleware"
+repo_name: django-ip-access-middleware
+
+theme:
+  name: mkdocs
+
+nav:
+  - Home: index.md
+  - Installation & Setup: installation.md
+  - Usage: usage.md
+  - Configuration: configuration.md
+  - API Reference: api.md
+  - Contributing: contributing.md
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - tables
+  - fenced_code
+
+

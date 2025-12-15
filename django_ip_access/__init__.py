@@ -8,9 +8,19 @@ A Django middleware for IP and hostname-based access control with support for:
 - Route-based access control with regex, exact, startswith, endswith patterns
 """
 
-__version__ = '1.0.4'
+__version__ = '1.1.0'
 __author__ = 'Mohammad Mohammad Hosseini'
 __email__ = 'dev.mohammadhosseiny@gmail.com'
 
 default_app_config = 'django_ip_access.apps.DjangoIpAccessConfig'
+
+from .middleware import IPAccessMiddleware  # convenience import
+from .mixins import IPAccessMixin
+from .decorators import ip_access_required
+
+__all__ = [
+    "IPAccessMiddleware",
+    "IPAccessMixin",
+    "ip_access_required",
+]
 
